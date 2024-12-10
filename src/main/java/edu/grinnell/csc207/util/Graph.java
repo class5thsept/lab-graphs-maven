@@ -976,4 +976,37 @@ public class Graph {
     return num;
   } // safeVertexNumber(String)
 
+  // +----------------+---------------------------------------------------
+  // | New Algorithms |
+  // +----------------+
+  public Edge shortestPath(int source, int sink) {
+    //Indicate that all vertices have infinite distance from SOURCE [DONE]
+    //Indicate that SOURCE has a distance of 0 from itself [DONE]
+    // While unmarked(SINK) and there exists an unmarked node with finite distance from SOURCE
+    //   Find the nearest unmarked vertex, U
+    //   Mark U
+    //   For each unmarked neighbor, V, of U
+    //     If distanceTo(U) + edgeWeight(U,V) < distanceTo(V)
+    //       Note that the best known path to V is the path to U plus the
+    //         edge from U to V.
+    //       Update the distance to V
+    // Report the path to SINK, if there is one
+    int[] distances = new int[this.numVertices];
+    for(int i = 0; i<numVertices;i++) {
+      distances[i] = Integer.MAX_VALUE;
+    }
+    distances[source] = 0;
+    int nodesTaken = 0;
+    int[] paths = [];
+    while (!this.isMarked(sink) && nodesTaken != numVertices) {
+      for (Edge edge : this.vertices[]) {
+        
+      }
+    }
+
+
+
+  }
+
+
 } // class Graph
