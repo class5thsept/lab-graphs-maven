@@ -283,7 +283,7 @@ public class Graph {
   /**
    * Write the graph in the form expected by readGraph.
    *
-   * @param pen
+   * @param penGraph
    *   Where to print the graph.
    */
   public void write(PrintWriter pen) {
@@ -991,16 +991,22 @@ public class Graph {
     //         edge from U to V.
     //       Update the distance to V
     // Report the path to SINK, if there is one
+
+    //How might you find all the edges from a vertex?
+    // We use Graph.edgesFrom(vertex).
     int[] distances = new int[this.numVertices];
     for(int i = 0; i<numVertices;i++) {
       distances[i] = Integer.MAX_VALUE;
     }
     distances[source] = 0;
+
+    int[] prevNode = new int[vertices.length];
+ 
     int nodesTaken = 0;
-    int[] paths = [];
     while (!this.isMarked(sink) && nodesTaken != numVertices) {
-      for (Edge edge : this.vertices[]) {
-        
+      for(Edge edge : this.edgesFrom(source)){
+        int next = edge.weight();
+        if ()
       }
     }
 
