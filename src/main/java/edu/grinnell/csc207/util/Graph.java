@@ -979,38 +979,60 @@ public class Graph {
   // +----------------+---------------------------------------------------
   // | New Algorithms |
   // +----------------+
-  public Edge shortestPath(int source, int sink) {
-    //Indicate that all vertices have infinite distance from SOURCE [DONE]
-    //Indicate that SOURCE has a distance of 0 from itself [DONE]
-    // While unmarked(SINK) and there exists an unmarked node with finite distance from SOURCE
-    //   Find the nearest unmarked vertex, U
-    //   Mark U
-    //   For each unmarked neighbor, V, of U
-    //     If distanceTo(U) + edgeWeight(U,V) < distanceTo(V)
-    //       Note that the best known path to V is the path to U plus the
-    //         edge from U to V.
-    //       Update the distance to V
-    // Report the path to SINK, if there is one
+  public List<Edge>[] shortestPath(int source, int sink) {
+    //1) Indicate that all vertices have infinite distance from SOURCE                            [DONE]
+    //2) Indicate that SOURCE has a distance of 0 from itself                                     [DONE]
+    //3) While unmarked(SINK) and there exists an unmarked node with finite distance from SOURCE
+    //3.1)   Find the nearest unmarked vertex, U                                                  [DONE]
+    //3.2)   Mark U                                                                               [DONE]
+    //3.3)   For each unmarked neighbor, V, of U
+    //3.3.1)     If distanceTo(U) + edgeWeight(U,V) < distanceTo(V)
+    //           (Note that the best known path to V is the path to U plus the edge from U to V.)
+    //         
+    //3.3.2)     Update the distance to V
+    //4) Report the path to SINK, if there is one
 
     //How might you find all the edges from a vertex?
     // We use Graph.edgesFrom(vertex).
     int[] distances = new int[this.numVertices];
+    int current = 0;
     for(int i = 0; i<numVertices;i++) {
       distances[i] = Integer.MAX_VALUE;
     }
     distances[source] = 0;
 
-    int[] prevNode = new int[vertices.length];
+    List<Edge>[] prevNode = new int[vertices.length];
  
     int nodesTaken = 0;
-    while (!this.isMarked(sink) && nodesTaken != numVertices) {
-      for(Edge edge : this.edgesFrom(source)){
-        int next = edge.weight();
-        if ()
+    while (!this.isMarked(sink)) {
+      int lowestWeight = Integer.MAX_VALUE;
+      Edge smallestEdge;
+      int nearestDistance = Integer.MAX_VALUE;
+
+      //Find Nearest unmarked vertex
+      for (int i = 0; i < distances.length; i++){
+        if (distances[i] < nearestDistance && !isMarked(i)) {
+          current = i;
+          nearestDistance = distances[i];
+        }
+      }
+      if (nearestDistance == Integer.MAX_VALUE) {
+        return new Edge(-1, -1);
+      }
+      // Mark U
+      this.mark(current);
+      for(Edge edge : this.edgesFrom(current)){
+        
+        if (!this.isMarked(edge.target())) {
+
+          if(distances[current] + edge.weight() < distances[edge.target()]){
+            distances[edge.target()] = distances[current] + edge.weight();
+            prevNode[edge.target()] = edge;
+          }    
+        }
       }
     }
-
-
+    return prevNode;
 
   }
 
