@@ -979,7 +979,7 @@ public class Graph {
   // +----------------+---------------------------------------------------
   // | New Algorithms |
   // +----------------+
-  public List<Edge>[] shortestPath(int source, int sink) {
+  public List<Edge> shortestPath(int source, int sink) {
     //1) Indicate that all vertices have infinite distance from SOURCE                            [DONE]
     //2) Indicate that SOURCE has a distance of 0 from itself                                     [DONE]
     //3) While unmarked(SINK) and there exists an unmarked node with finite distance from SOURCE
@@ -992,21 +992,18 @@ public class Graph {
     //3.3.2)     Update the distance to V
     //4) Report the path to SINK, if there is one
 
-    //How might you find all the edges from a vertex?
-    // We use Graph.edgesFrom(vertex).
     int[] distances = new int[this.numVertices];
-    int current = 0;
+    Edge[] prevNode = new Edge[this.numVertices];
+    
+    // Parts 1 and 2
     for(int i = 0; i<numVertices;i++) {
       distances[i] = Integer.MAX_VALUE;
     }
     distances[source] = 0;
 
-    List<Edge>[] prevNode = new int[vertices.length];
- 
-    int nodesTaken = 0;
+    // Part 3
     while (!this.isMarked(sink)) {
-      int lowestWeight = Integer.MAX_VALUE;
-      Edge smallestEdge;
+      int current = -1; // this helps to check if current was modified
       int nearestDistance = Integer.MAX_VALUE;
 
       //Find Nearest unmarked vertex
@@ -1016,11 +1013,11 @@ public class Graph {
           nearestDistance = distances[i];
         }
       }
-      if (nearestDistance == Integer.MAX_VALUE) {
-        return new Edge(-1, -1);
-      }
+
       // Mark U
       this.mark(current);
+
+      //Updating distances to V
       for(Edge edge : this.edgesFrom(current)){
         
         if (!this.isMarked(edge.target())) {
@@ -1032,9 +1029,19 @@ public class Graph {
         }
       }
     }
-    return prevNode;
-
+    //Report the path to SINK, if there is one
+    //Following a similar structure as the path method, we will use a linked list and stop when end meets the beginning
+    LinkedList<Edge> path = new LinkedList<Edge>();
+    int current = sink;
+    while(current != source) {
+      for (Edge edge : this.edgesFrom(current)){
+        if (distances[current] + edge.weight() == distances[edge.target()]) {
+          path.addFirst(edge);
+          current = edge.source();
+          break;
+        }
+      }
+    }
+    return path;
   }
-
-
 } // class Graph
