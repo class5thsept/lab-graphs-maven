@@ -1034,13 +1034,9 @@ public class Graph {
     LinkedList<Edge> path = new LinkedList<Edge>();
     int current = sink;
     while(current != source) {
-      for (Edge edge : this.edgesFrom(current)){
-        if (distances[current] + edge.weight() == distances[edge.target()]) {
-          path.addFirst(edge);
-          current = edge.source();
-          break;
-        }
-      }
+      Edge edge = prevNode[current];
+      path.addFirst(edge);
+      current = edge.source();
     }
     return path;
   }
